@@ -1,6 +1,7 @@
 package com.example.lab_week_02_b_sandy
 
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 class ResultActivity : AppCompatActivity() {
     companion object {
         private const val COLOR_KEY = "COLOR_KEY"
+        private const val ERROR_KEY = "ERROR_KEY"
         private const val TAG = "RESULT"
     }
 
@@ -32,7 +34,17 @@ class ResultActivity : AppCompatActivity() {
             val colorCode = intent.getStringExtra(COLOR_KEY)
             Log.d(TAG, "kocak: $colorCode.toString()")
             val bgScreen = findViewById<ConstraintLayout>(R.id.bg_screen)
+
+            try {
             bgScreen.setBackgroundColor(Color.parseColor("#$colorCode"))
+            } catch (ex: IllegalArgumentException){
+                Intent().let {
+                    errorIntent ->
+                    errorIntent.putExtra(ERROR_KEY, true)
+                    setResult(Activity.RESULT_OK, errorIntent)
+                    finish()
+                }
+            }
             val resMsg = findViewById<TextView>(R.id.color_code_result_msg)
             resMsg.text = getString(R.string.color_code_result_msg, colorCode?.uppercase())
         }
