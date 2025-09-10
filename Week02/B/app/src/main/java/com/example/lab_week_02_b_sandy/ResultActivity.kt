@@ -1,11 +1,11 @@
 package com.example.lab_week_02_b_sandy
 
-
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -30,16 +30,19 @@ class ResultActivity : AppCompatActivity() {
             insets
         }
 
+        findViewById<Button>(R.id.return_btn).setOnClickListener {
+            finish()
+        }
+
         if (intent != null) {
             val colorCode = intent.getStringExtra(COLOR_KEY)
             Log.d(TAG, "kocak: $colorCode.toString()")
             val bgScreen = findViewById<ConstraintLayout>(R.id.bg_screen)
 
             try {
-            bgScreen.setBackgroundColor(Color.parseColor("#$colorCode"))
-            } catch (ex: IllegalArgumentException){
-                Intent().let {
-                    errorIntent ->
+                bgScreen.setBackgroundColor(Color.parseColor("#$colorCode"))
+            } catch (ex: IllegalArgumentException) {
+                Intent().let { errorIntent ->
                     errorIntent.putExtra(ERROR_KEY, true)
                     setResult(Activity.RESULT_OK, errorIntent)
                     finish()

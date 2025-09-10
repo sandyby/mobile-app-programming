@@ -12,11 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LAB_WEEK_02_B_Sandy">
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
             android:name=".ResultActivity"
-            android:exported="false" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
