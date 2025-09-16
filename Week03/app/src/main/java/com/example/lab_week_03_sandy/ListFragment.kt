@@ -44,7 +44,6 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
@@ -53,7 +52,22 @@ class ListFragment : Fragment() {
         val coffeeList = listOf<View>(
             view.findViewById(R.id.affogato),
             view.findViewById(R.id.americano),
-            view.findViewById(R.id.latte)
+            view.findViewById(R.id.latte),
+            view.findViewById(R.id.kenangan_mantan),
+            view.findViewById(R.id.vanilla_latte),
+            view.findViewById(R.id.butterscotch_kenangan_frappe),
+            view.findViewById(R.id.flat_white),
+            view.findViewById(R.id.mocha),
+            view.findViewById(R.id.cold_brew),
+            view.findViewById(R.id.caramel_latte),
+            view.findViewById(R.id.spanish_latte),
+            view.findViewById(R.id.butterscotch_sea_salt_latte),
+            view.findViewById(R.id.matcha_espresso),
+            view.findViewById(R.id.pandan_aren_malt_latte),
+            view.findViewById(R.id.butterscotch_sea_salt_crumble),
+            view.findViewById(R.id.oatside_kenangan_mantan),
+            view.findViewById(R.id.oatside_latte),
+            view.findViewById(R.id.oatside_matcha_latte),
         )
         coffeeList.forEach{
             coffee ->

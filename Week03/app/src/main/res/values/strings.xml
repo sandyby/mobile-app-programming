@@ -6,5 +6,36 @@
     <string name="americano_desc">Espresso with added hot water (100-150 ml). Often served in a cappuccino cup. (The espresso is added into the hot water rather than all the water being flowed through the coffee that would lead to over extraction).</string>
     <string name="latte_title">CAFFE LATTE</string>
     <string name="latte_desc">A tall, mild \'milk coffee\' (about 150-300 ml). An espresso with steamed milk and only a little milk foam poured over it. Serve in a latte glass or a coffee cup. Flavored syrup can be added.</string>
+    <string name="kenangan_mantan_title">KENANGAN MANTAN</string>
+    <string name="kenangan_mantan_desc">A goated combination of coffee, milk, and palm sugar.</string>
+    <string name="vanilla_latte_title">VANILLA LATTE</string>
+    <string name="vanilla_latte_desc">The perfect blend of coffee with the strong vanilla taste to lighten up your mood on the rough day..</string>
+    <string name="butterscotch_kenangan_frappe_title">BUTTERSCOTCH KENANGAN FRAPPE</string>
+    <string name="butterscotch_kenangan_frappe_desc">You like caramel? Same.</string>
+    <string name="flat_white_title">FLAT WHITE</string>
+    <string name="flat_white_desc">I guess you like latte.. with less foam.</string>
+    <string name="mocha_title">MOCHA</string>
+    <string name="mocha_desc">For those milk and chocolate combination lovers out there.</string>
+    <string name="cold_brew_title">COLD BREW</string>
+    <string name="cold_brew_desc">Brrrr, it a coarsely grounded coffee steeped in cold water for up to 24 hours, 12 minimal.</string>
+    <string name="caramel_latte_title">CARAMEL LATTE</string>
+    <string name="caramel_latte_desc">More caramel? Oh yeah.</string>
+    <string name="spanish_latte_title">SPANISH LATTE</string>
+    <string name="spanish_latte_desc">It\'s just a combination of milk, espresso, and condensed milk. No turning you into a hispanic.</string>
+    <string name="butterscotch_sea_salt_latte_title">BUTTERSCOTCH SEA SALT LATTE</string>
+    <string name="butterscotch_sea_salt_latte_desc">A latte with sea salt and a topping of sea salt macchiato cream.</string>
+    <string name="matcha_espresso_title">MATCHA ESPRESSO</string>
+    <string name="matcha_espresso_desc">For those matcha lovers out there, YES, espresso with a high quality matcha powder.</string>
+    <string name="pandan_aren_malt_latte_title">PANDAN AREN MALT LATTE</string>
+    <string name="pandan_aren_malt_latte_desc">A lovely combination of espresso, palm sugar, fresh milk, and pandan syrup. FLAVOR BOMB.</string>
+    <string name="butterscotch_sea_salt_crumble_title">BUTTERSCOTCH SEA SALT CRUMBLE</string>
+    <string name="butterscotch_sea_salt_crumble_desc">Give me more crumbs.. please?</string>
+    <string name="oatside_kenangan_mantan_title">OATSIDE KENANGAN MANTAN</string>
+    <string name="oatside_kenangan_mantan_desc">Kenangan mantan.. but with OATSIDE!</string>
+    <string name="oatside_latte_title">OATSIDE LATTE</string>
+    <string name="oatside_latte_desc">Latte... but with OATSIDE!</string>
+    <string name="oatside_matcha_latte_title">OATSIDE MATCHA LATTE</string>
+    <string name="oatside_matcha_latte_desc">Let me guess.. matcha latte.. but with OATSIDE!</string>
+
     <string name="coffee_list">Coffee List</string>
 </resources>

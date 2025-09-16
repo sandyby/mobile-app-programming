@@ -44,5 +44,110 @@
             android:padding="10dp"
             android:text="@string/latte_title" />
 
+        <TextView
+            android:id="@+id/kenangan_mantan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/kenangan_mantan_title" />
+
+        <TextView
+            android:id="@+id/vanilla_latte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/vanilla_latte_title" />
+
+        <TextView
+            android:id="@+id/butterscotch_kenangan_frappe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/butterscotch_kenangan_frappe_title" />
+
+        <TextView
+            android:id="@+id/flat_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/flat_white_title" />
+
+        <TextView
+            android:id="@+id/mocha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/mocha_title" />
+
+        <TextView
+            android:id="@+id/cold_brew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/cold_brew_title" />
+
+        <TextView
+            android:id="@+id/caramel_latte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/caramel_latte_title" />
+
+        <TextView
+            android:id="@+id/spanish_latte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/spanish_latte_title" />
+
+        <TextView
+            android:id="@+id/butterscotch_sea_salt_latte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/butterscotch_sea_salt_latte_title" />
+
+        <TextView
+            android:id="@+id/matcha_espresso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/matcha_espresso_title" />
+
+        <TextView
+            android:id="@+id/pandan_aren_malt_latte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/pandan_aren_malt_latte_title" />
+
+        <TextView
+            android:id="@+id/butterscotch_sea_salt_crumble"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/butterscotch_sea_salt_crumble_title" />
+
+        <TextView
+            android:id="@+id/oatside_kenangan_mantan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/oatside_kenangan_mantan_title" />
+
+        <TextView
+            android:id="@+id/oatside_latte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/oatside_latte_title" />
+
+        <TextView
+            android:id="@+id/oatside_matcha_latte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/oatside_matcha_latte_title" />
+
     </LinearLayout>
 </ScrollView>
