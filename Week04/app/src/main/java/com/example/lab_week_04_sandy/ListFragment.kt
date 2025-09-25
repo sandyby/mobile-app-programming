@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 
 class ListFragment : Fragment() {
+    companion object {
+        const val COFFEE_ID = "COFFEE_ID"
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -36,9 +40,5 @@ class ListFragment : Fragment() {
                 )
             )
         }
-    }
-
-    companion object {
-        const val COFFEE_ID = "COFFEE_ID"
     }
 }
