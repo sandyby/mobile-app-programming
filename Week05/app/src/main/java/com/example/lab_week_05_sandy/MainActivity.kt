@@ -50,6 +50,13 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.tvAPIResponse)
     }
 
+    private val breedNameView: TextView by lazy {
+        findViewById(R.id.tvBreedName)
+    }
+    private val breedTemperamentView: TextView by lazy {
+        findViewById(R.id.tvBreedTemperament)
+    }
+
     private val imageResultView: ImageView by lazy {
         findViewById(R.id.ivImageResult)
     }
@@ -76,7 +83,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun getCatImageResponse() {
         val call = catApiService.searchImages(
             1,
@@ -91,23 +97,33 @@ class MainActivity : AppCompatActivity() {
                 call: Call<List<ImageData>>,
                 response: Response<List<ImageData>>
             ) {
-//                if (response.isSuccessful) {
-//                    apiResponseView.text = response.body()
-//                } else {
-//                    Log.e(
-//                        MAIN_ACTIVITY,
-//                        "Failed to get responses\n" + response.errorBody()?.string().orEmpty()
-//                    )
-//                }
                 if (response.isSuccessful) {
+                    Log.d(MAIN_ACTIVITY, response.body().toString())
                     val image = response.body()
-                    val firstImage = image?.firstOrNull()?.imageUrl.orEmpty()
-                    if (firstImage.isNotBlank()) {
-                        imageLoader.loadImage(firstImage, imageResultView)
+                    val firstImage = image?.firstOrNull()
+
+                    if (firstImage == null)
+                        return;
+
+                    val imageUrl = firstImage.imageUrl.orEmpty()
+                    if (imageUrl.isNotBlank()) {
+                        imageLoader.loadImage(imageUrl, imageResultView)
                     } else {
                         Log.d(MAIN_ACTIVITY, "Missing Image URL")
                     }
-                    apiResponseView.text = getString(R.string.image_placeholder, firstImage)
+
+                    val catBreed = firstImage.breeds.orEmpty()
+                    if (catBreed.isEmpty()) {
+                        breedNameView.text = getString(R.string.breed_placeholder)
+                        breedTemperamentView.text = getString(R.string.breed_placeholder)
+                        return;
+                    }
+
+                    val firstCatBreed = catBreed.first()
+
+                    breedNameView.text = firstCatBreed.name
+                    breedTemperamentView.text = firstCatBreed.temperament
+
                 } else {
                     Log.e(
                         MAIN_ACTIVITY,
