@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -14,9 +16,12 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        val catApiKey: String = project.findProperty("CAT_API_KEY") as String? ?: ""
-        buildConfigField("String", "CAT_API_KEY", "\"$catApiKey\"")
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val localProperties = project.rootProject.file("local.properties")
+        if (localProperties.exists()){
+            val properties = Properties()
+            properties.load(localProperties.inputStream())
+            buildConfigField("String", "CAT_API_KEY", "\"${properties.getProperty("CAT_API_KEY")}\"")
+        }
     }
 
     buildFeatures {
@@ -53,4 +58,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 }

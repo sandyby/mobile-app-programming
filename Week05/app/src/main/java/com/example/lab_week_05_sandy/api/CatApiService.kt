@@ -1,5 +1,6 @@
 package com.example.lab_week_05_sandy.api
 
+import com.example.lab_week_05_sandy.model.ImageData
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -11,6 +12,5 @@ interface CatApiService {
     fun searchImages(
         @Query("limit") limit: Int,
         @Query("size") format: String,
-        @Query("api_key") api: String,
-    ): Call<String>
+    ): Call<List<ImageData>>
 }
