@@ -1,7 +1,10 @@
 package com.example.lab_week_05_sandy
 
+import GlideLoader
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.lab_week_05_sandy.api.CatApiService
 import com.example.lab_week_05_sandy.model.ImageData
-import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,6 +50,14 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.tvAPIResponse)
     }
 
+    private val imageResultView: ImageView by lazy {
+        findViewById(R.id.ivImageResult)
+    }
+
+    private val imageLoader: ImageLoader by lazy {
+        GlideLoader(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,7 +68,14 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         getCatImageResponse()
+
+        val btnNextCat: Button = findViewById<Button>(R.id.btnNextCat)
+        btnNextCat.setOnClickListener {
+            getCatImageResponse()
+        }
     }
+
+
 
     private fun getCatImageResponse() {
         val call = catApiService.searchImages(
@@ -84,7 +101,12 @@ class MainActivity : AppCompatActivity() {
 //                }
                 if (response.isSuccessful) {
                     val image = response.body()
-                    val firstImage = image?.firstOrNull()?.imageUrl ?: "No URL"
+                    val firstImage = image?.firstOrNull()?.imageUrl.orEmpty()
+                    if (firstImage.isNotBlank()) {
+                        imageLoader.loadImage(firstImage, imageResultView)
+                    } else {
+                        Log.d(MAIN_ACTIVITY, "Missing Image URL")
+                    }
                     apiResponseView.text = getString(R.string.image_placeholder, firstImage)
                 } else {
                     Log.e(
