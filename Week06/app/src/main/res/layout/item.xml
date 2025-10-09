@@ -1,55 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/mcvCatItem"
     android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/gender_unknown"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
     android:padding="10dp">
 
-
-    <ImageView
-        android:id="@+id/ivCatPhoto"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:background="@color/material_dynamic_neutral50" />
-
-    <TextView
-        android:id="@+id/tvCatName"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/ivCatPhoto"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Cat Name" />
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvCatBreed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/tvCatName"
-        app:layout_constraintTop_toBottomOf="@+id/tvCatName"
-        tools:text="Cat Breed" />
+        <ImageView
+            android:id="@+id/ivCatPhoto"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@color/material_dynamic_neutral50" />
 
-    <TextView
-        android:id="@+id/tvCatBiography"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/tvCatBreed"
-        app:layout_constraintStart_toStartOf="@+id/tvCatBreed"
-        tools:text="Cat Biography" />
+        <TextView
+            android:id="@+id/tvCatName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/ivCatPhoto"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/ivCatPhoto"
+            android:singleLine="true"
+            android:layout_marginTop="8dp"
+            tools:text="Cat Name" />
 
-    <TextView
-        android:id="@+id/tvCatGender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="&#9794;" />
+        <TextView
+            android:id="@+id/tvCatBreed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            app:layout_constraintStart_toStartOf="@+id/tvCatName"
+            app:layout_constraintTop_toBottomOf="@+id/tvCatName"
+            tools:text="Cat Breed" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvCatBiography"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxWidth="240dp"
+            android:textColor="@color/black"
+            android:maxHeight="70dp"
+            app:layout_constraintStart_toEndOf="@+id/ivCatPhoto"
+            app:layout_constraintTop_toTopOf="@+id/ivCatPhoto"
+            android:ellipsize="end"
+            android:maxLines="4"
+            tools:text="Cat BiographyasjdhasjdhajdhjahdjadhjadjasdhjahdjadhjadhajdhajdjBiographyasjdhasjdhajdhjahdjadhjadjasdhjahdjadhjadhajdhajdjBiographyasjdhasjdhajdhjahdjadhjadjasdhjahdjadhjadhajdhajdj" />
+
+
+        <TextView
+            android:id="@+id/tvCatGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="&#9794;" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

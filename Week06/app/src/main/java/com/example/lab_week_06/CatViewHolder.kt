@@ -1,13 +1,16 @@
 package com.example.lab_week_06
 
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab_week_06.loader.ImageLoader
 import com.example.lab_week_06.model.CatBreed
 import com.example.lab_week_06.model.CatModel
 import com.example.lab_week_06.model.Gender
+import com.google.android.material.card.MaterialCardView
 
 private val FEMALE_SYMBOL = "\u2640"
 private val MALE_SYMBOL = "\u2642"
@@ -35,6 +38,10 @@ class CatViewHolder(
         containerView.findViewById(R.id.ivCatPhoto)
     }
 
+    private val catCardView: MaterialCardView by lazy {
+        containerView.findViewById(R.id.mcvCatItem)
+    }
+
     fun bindData(cat: CatModel) {
         containerView.setOnClickListener {
             onClickListener.onItemClick(cat)
@@ -46,13 +53,50 @@ class CatViewHolder(
             CatBreed.AmericanCurl -> "American Curl"
             CatBreed.BalineseJavanese -> "Balinese-Javanese"
             CatBreed.ExoticShorthair -> "Exotic Shorthair"
+            CatBreed.Abyssinian -> "Abyssinian"
+            CatBreed.Bengal -> "Bengal"
+            CatBreed.NorwegianForest -> "Norwegian Forest"
+            CatBreed.Birman -> "Birman"
+            CatBreed.MaineCoon -> "Maine Coon"
+            CatBreed.Persian -> "Persian"
+            CatBreed.RussianBlue -> "Russian Blue"
+            CatBreed.Siamese -> "Siamese"
+            CatBreed.ScottishFold -> "Scottish Fold"
+            CatBreed.Sphynx -> "Sphynx"
+            CatBreed.Ragdoll -> "Ragdoll"
             else -> "Unknown"
         }
         catBiographyView.text = cat.biography
-        catGenderView.text = when (cat.gender) {
-            Gender.Female -> FEMALE_SYMBOL
-            Gender.Male -> MALE_SYMBOL
-            else -> UNKNOWN_SYMBOL
+        when (cat.gender) {
+            Gender.Female -> {
+                catGenderView.text = FEMALE_SYMBOL
+                catCardView.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        containerView.context,
+                        R.color.gender_pink
+                    )
+                )
+            }
+
+            Gender.Male -> {
+                catGenderView.text = MALE_SYMBOL
+                catCardView.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        containerView.context,
+                        R.color.gender_blue
+                    )
+                )
+            }
+
+            else -> {
+                catGenderView.text = UNKNOWN_SYMBOL
+                catCardView.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        containerView.context,
+                        R.color.gender_unknown
+                    )
+                )
+            }
         }
     }
 }
