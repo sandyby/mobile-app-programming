@@ -2,26 +2,31 @@ package com.example.lab_week_07
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-
+import com.example.lab_week_07.databinding.ActivityMapsBinding
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.example.lab_week_07.databinding.ActivityMapsBinding
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
+    private val fusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,12 +62,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
             }
+
             else -> requestPermissionLauncher.launch(ACCESS_FINE_LOCATION)
         }
-
-//        val jakarta = LatLng(6.1944, 106.8228)
-//        mMap.addMarker(MarkerOptions().position(jakarta).title("Jakarta, Indonesia"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(jakarta))
     }
 
     private fun hasLocationPermission() = ContextCompat.checkSelfPermission(
@@ -79,6 +81,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getLastLocation() {
-        Log.d("MapsActivity", "getLastLocation() called")
+        if (hasLocationPermission()) {
+            try {
+                fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    location?.let {
+                        val userLocation = LatLng(location.latitude, location.longitude)
+                        updateMapLocation(userLocation)
+                        addMarketAtLocation(userLocation, "You")
+                    }
+                }
+            } catch (e: SecurityException) {
+                Log.e("MapsActivity", "SecurityException: ${e.message}")
+            }
+        } else {
+            requestPermissionLauncher.launch(ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private fun updateMapLocation(location: LatLng) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
+    }
+
+    private fun addMarketAtLocation(location: LatLng, title: String) {
+        mMap.addMarker(MarkerOptions().position(location).title(title))
     }
 }
