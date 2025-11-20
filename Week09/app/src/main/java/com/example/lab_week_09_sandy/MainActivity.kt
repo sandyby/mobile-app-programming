@@ -29,6 +29,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lab_week_09_sandy.ui.theme.LAB_WEEK_09_SandyTheme
+import com.example.lab_week_09_sandy.ui.theme.OnBackgroundItemText
+import com.example.lab_week_09_sandy.ui.theme.OnBackgroundTitleText
+import com.example.lab_week_09_sandy.ui.theme.PrimaryTextButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +75,7 @@ fun Home(
             inputField.value = inputField.value.copy(input)
         },
         {
-            if (inputField.value.name.isNotBlank()){
+            if (inputField.value.name.isNotBlank()) {
                 listData.add(inputField.value)
                 inputField.value = Student("")
             }
@@ -97,7 +100,10 @@ fun HomeContent(
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
+//                Text(
+//                    text = stringResource(R.string.add_name_placeholder)
+//                )
+                OnBackgroundTitleText(
                     text = stringResource(R.string.add_name_placeholder)
                 )
                 TextField(
@@ -109,26 +115,35 @@ fun HomeContent(
                         onInputValueChange(it)
                     }
                 )
-                Button(onClick = {
+                PrimaryTextButton(
+                    text = stringResource(R.string.add_name_button)
+                ) {
                     onButtonClick()
-                }) {
-                    Text(
-                        text = stringResource(
-                            id = R.string.add_name_button
-                        )
-                    )
                 }
+//                Button(onClick = {
+//                    onButtonClick()
+//                }) {
+//                    Text(
+//                        text = stringResource(
+//                            id = R.string.add_name_button
+//                        )
+//                    )
+//                }
             }
         }
-        items(listData) {
-            item ->
+        items(listData) { item ->
             Column(
-                modifier = Modifier.padding(vertical = 4.dp).fillMaxSize(),
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
+                OnBackgroundItemText(
                     text = item.name
                 )
+                //                Text(
+//                    text = item.name
+//                )
             }
         }
     }
