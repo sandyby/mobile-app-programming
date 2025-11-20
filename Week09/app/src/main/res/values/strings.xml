@@ -3,4 +3,5 @@
     <string name="list_title">Students</string>
     <string name="add_name_placeholder">Enter a name</string>
     <string name="add_name_button">Add Student</string>
+    <string name="navigation_button">Finish</string>
 </resources>

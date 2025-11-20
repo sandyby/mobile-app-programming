@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +29,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.lab_week_09_sandy.ui.theme.LAB_WEEK_09_SandyTheme
 import com.example.lab_week_09_sandy.ui.theme.OnBackgroundItemText
 import com.example.lab_week_09_sandy.ui.theme.OnBackgroundTitleText
@@ -42,7 +49,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Home()
+                    val navController = rememberNavController()
+                    App(
+                        navController = navController
+                    )
                 }
             }
         }
@@ -53,10 +63,40 @@ data class Student(
     var name: String,
 )
 
-@Preview(showBackground = true)
+@Composable
+fun App(
+    navController: NavHostController
+) {
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
+        composable("home") {
+            Home {
+                navController.navigate(
+                    "resultContent/?listData=$it"
+                )
+            }
+        }
+        composable(
+            "resultContent/?listData={listData}",
+            arguments = listOf(
+                navArgument("listData")
+                {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            ResultContent(
+                it.arguments?.getString("listData").orEmpty()
+            )
+        }
+    }
+}
+
 @Composable
 fun Home(
-    //
+    navigateFromHomeToResult: (String) -> Unit
 ) {
     val listData = remember {
         mutableStateListOf(
@@ -79,6 +119,9 @@ fun Home(
                 listData.add(inputField.value)
                 inputField.value = Student("")
             }
+        },
+        {
+            navigateFromHomeToResult(listData.toList().toString())
         }
     )
 }
@@ -88,7 +131,8 @@ fun HomeContent(
     listData: SnapshotStateList<Student>,
     inputField: Student,
     onInputValueChange: (String) -> Unit,
-    onButtonClick: () -> Unit
+    onButtonClick: () -> Unit,
+    navigateFromHomeToResult: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.padding(8.dp)
@@ -115,10 +159,19 @@ fun HomeContent(
                         onInputValueChange(it)
                     }
                 )
-                PrimaryTextButton(
-                    text = stringResource(R.string.add_name_button)
+                Row(
+                    //
                 ) {
-                    onButtonClick()
+                    PrimaryTextButton(
+                        text = stringResource(R.string.add_name_button)
+                    ) {
+                        onButtonClick()
+                    }
+                    PrimaryTextButton(
+                        text = stringResource(R.string.navigation_button)
+                    ) {
+                        navigateFromHomeToResult()
+                    }
                 }
 //                Button(onClick = {
 //                    onButtonClick()
@@ -146,5 +199,21 @@ fun HomeContent(
 //                )
             }
         }
+    }
+}
+
+@Composable
+fun ResultContent(
+    listData: String,
+) {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OnBackgroundItemText(
+            text = listData
+        )
     }
 }
