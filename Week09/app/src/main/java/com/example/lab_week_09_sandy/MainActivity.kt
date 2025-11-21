@@ -1,9 +1,12 @@
 package com.example.lab_week_09_sandy
 
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +29,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,10 +40,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.lab_week_09_sandy.providers.MoshiProvider
 import com.example.lab_week_09_sandy.ui.theme.LAB_WEEK_09_SandyTheme
 import com.example.lab_week_09_sandy.ui.theme.OnBackgroundItemText
 import com.example.lab_week_09_sandy.ui.theme.OnBackgroundTitleText
 import com.example.lab_week_09_sandy.ui.theme.PrimaryTextButton
+import com.example.lab_week_09_sandy.ui.theme.StudentCard
+import com.squareup.moshi.Json
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +69,10 @@ class MainActivity : ComponentActivity() {
 }
 
 data class Student(
+    @Json(name = "name")
     var name: String,
+    @Json(name = "studentNIM")
+    var studentNIM: String,
 )
 
 @Composable
@@ -100,28 +112,41 @@ fun Home(
 ) {
     val listData = remember {
         mutableStateListOf(
-            Student("Tanu"),
-            Student("Tina"),
-            Student("Tono")
+            Student("Tanu", "00000170819"),
+            Student("Tina", "00001717778"),
+            Student("Tono", "00000198989")
         )
     }
 
     var inputField = remember {
-        mutableStateOf(Student(""))
+        mutableStateOf(Student("", ""))
     }
 
+    val json = MoshiProvider.studentListAdapter.toJson(listData)
+    val encoded = Uri.encode(json)
+
     HomeContent(
-        listData, inputField.value, { input ->
+        listData,
+        inputField.value,
+        { input ->
             inputField.value = inputField.value.copy(input)
         },
         {
-            if (inputField.value.name.isNotBlank()) {
-                listData.add(inputField.value)
-                inputField.value = Student("")
+            if (inputField.value.name.trim().isNotBlank()) {
+                val trimmedName = inputField.value.name.trim()
+                val randomNIM = Random.nextInt(0, 9_9999_999) // adjust max if you want
+                val formattedNIM = String.format("%011d", randomNIM)
+                listData.add(
+                    Student(
+                        name = trimmedName,
+                        studentNIM = formattedNIM
+                    )
+                )
+                inputField.value = Student("", "")
             }
         },
         {
-            navigateFromHomeToResult(listData.toList().toString())
+            navigateFromHomeToResult(encoded)
         }
     )
 }
@@ -134,6 +159,10 @@ fun HomeContent(
     onButtonClick: () -> Unit,
     navigateFromHomeToResult: () -> Unit
 ) {
+    val isAddEnabled =
+        inputField.name.trim().isNotBlank() && inputField.name.matches(Regex("^[A-Za-z'\\- ]+$"))
+    val isFinishEnabled = listData.isNotEmpty()
+
     LazyColumn(
         modifier = Modifier.padding(8.dp)
     ) {
@@ -163,12 +192,14 @@ fun HomeContent(
                     //
                 ) {
                     PrimaryTextButton(
-                        text = stringResource(R.string.add_name_button)
+                        text = stringResource(R.string.add_name_button),
+                        isEnabled = isAddEnabled
                     ) {
                         onButtonClick()
                     }
                     PrimaryTextButton(
-                        text = stringResource(R.string.navigation_button)
+                        text = stringResource(R.string.navigation_button),
+                        isEnabled = isFinishEnabled
                     ) {
                         navigateFromHomeToResult()
                     }
@@ -204,16 +235,21 @@ fun HomeContent(
 
 @Composable
 fun ResultContent(
-    listData: String,
+    listDataFromJson: String,
 ) {
-    Column(
+    val decoded = remember(listDataFromJson) {
+        val json = Uri.decode(listDataFromJson)
+        MoshiProvider.studentListAdapter.fromJson(json) ?: emptyList()
+    }
+
+    LazyColumn(
         modifier = Modifier
-            .padding(vertical = 4.dp)
+            .padding(16.dp)
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        OnBackgroundItemText(
-            text = listData
-        )
+        items(decoded) { student ->
+            StudentCard(student)
+        }
     }
 }
