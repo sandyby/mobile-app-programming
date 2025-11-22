@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LAB_WEEK_10_Sandy</string>
+    <string name="tv_total">Total: %d</string>
+</resources>
