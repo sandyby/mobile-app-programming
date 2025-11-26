@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/schemas/com.example.lab_week_10_sandy.database.TotalDatabase/1.json
+/app/schemas/com.example.lab_week_10_sandy.database.TotalDatabase/2.json
