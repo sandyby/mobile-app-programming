@@ -1,0 +1,187 @@
+Questions:
+1. When a user takes a picture, that picture is stored in a path based on the given
+URI. In which part of the code handles this? (Copy that part of the code as the
+answer)
+
+The paths are defined in the res/xml folder:
+<paths>
+    <external-path
+        name="photos"
+        path="Android/data/com.example.lab_week_11_b_sandy/files/Pictures" />
+    <external-path
+        name="videos"
+        path="Android/data/com.example.lab_week_11_b_sandy/files/Movies" />
+</paths>
+
+and it is accessed via the FileHelper.kt:
+class FileHelper(private val context: Context) {
+    fun getUriFromFile(file: File): Uri {
+        return FileProvider.getUriForFile(
+            context, "com.example.lab_week_11_b_sandy.camera", file
+        )
+    }
+
+    fun getPicturesFolder(): String = Environment.DIRECTORY_PICTURES
+    fun getVideosFolder(): String = Environment.DIRECTORY_MOVIES
+}
+
+and also helped by the MediaContentHelper.kt:
+fun generateImageContentValues(fileInfo: FileInfo) = ContentValues().apply {
+        this.put(MediaStore.Images.Media.DISPLAY_NAME, fileInfo.name)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            this.put(MediaStore.Images.Media.RELATIVE_PATH, fileInfo.relativePath)
+        }
+        this.put(MediaStore.Images.Media.MIME_TYPE, fileInfo.mimeType)
+    }
+
+    fun generateVideoContentValues(fileInfo: FileInfo) = ContentValues().apply {
+        this.put(MediaStore.Video.Media.DISPLAY_NAME, fileInfo.name)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            this.put(MediaStore.Video.Media.RELATIVE_PATH, fileInfo.relativePath)
+        }
+        this.put(MediaStore.Video.Media.MIME_TYPE, fileInfo.mimeType)
+    }
+
+but, the main method invoking the helpers are here:
+fun insertImageToStore(fileInfo: FileInfo) {
+        fileInfo?.let {
+            insertToStore(
+                fileInfo,
+                mediaContentHelper.getImageContentUri(),
+                mediaContentHelper.generateImageContentValues(it)
+            )
+        }
+    }
+
+    fun insertVideoToStore(fileInfo: FileInfo?) {
+        fileInfo?.let {
+            insertToStore(
+                fileInfo,
+                mediaContentHelper.getVideoContentUri(),
+                mediaContentHelper.generateVideoContentValues(it)
+            )
+        }
+    }
+
+    private fun insertToStore(fileInfo: FileInfo, contentUri: Uri, contentValues: ContentValues) {
+
+        executor.execute {
+            val insertedUri = contentResolver.insert(contentUri, contentValues)
+            insertedUri?.let {
+                val inputStream = contentResolver.openInputStream(fileInfo.uri)
+                val outputStream = contentResolver.openOutputStream(insertedUri)
+                IOUtils.copy(inputStream, outputStream)
+            }
+        }
+    }
+
+2. In your FileInfo.kt, there are 5 attributes. On the first attribute, what does the URI
+refer to? And on the fourth attribute, what does relativePath refer to?
+
+The URI acts as an identifier to be referenced for our stored files and used in the read/writing operation, for example in the code below:
+private fun insertToStore(fileInfo: FileInfo, contentUri: Uri, contentValues: ContentValues) {
+
+        executor.execute {
+            val insertedUri = contentResolver.insert(contentUri, contentValues)
+            insertedUri?.let {
+                val inputStream = contentResolver.openInputStream(fileInfo.uri)
+                val outputStream = contentResolver.openOutputStream(insertedUri)
+                IOUtils.copy(inputStream, outputStream)
+            }
+        }
+    }
+
+Whereas the relativePath attribute is some sort of a virtual folder, mostly working with public directories such as these ones right here:
+fun getPicturesFolder(): String = Environment.DIRECTORY_PICTURES
+    fun getVideosFolder(): String = Environment.DIRECTORY_MOVIES
+
+It is not the direct path (which usually is very long) compared to
+relative paths 
+
+3. [Bonus] Explain the chronological order from when a user takes a picture until
+the file is stored in the MediaStore.
+
+findViewById<Button>(R.id.btn_photo).setOnClickListener {
+            isCapturingVideo = false
+            checkStoragePermission {
+                openImageCapture()
+            }
+        }
+
+From the beginning, the user clicks the Photo button. Which triggers the onClickListener and sets the isCapturingVideo flag to false. Which then continues to check for storage permission based on the OS version. Since it's granted, it will invoke the onPermissionGranted method that was passed on the call, which in this case is openImageCapture():
+
+private fun checkStoragePermission(onPermissionGranted: () -> Unit)
+
+In the method:
+
+private fun openImageCapture() {
+        photoInfo = providerFileManager.generatePhotoUri(System.currentTimeMillis())
+        takePictureLauncher.launch(photoInfo?.uri!!)
+    }
+
+It generates the Uri (file location) of the soon captured image will be written at, with the help of ProviderFileManager:
+
+fun generatePhotoUri(time: Long): FileInfo {
+        val name = "img_$time.jpg"
+        val file = File(
+            context.getExternalFilesDir(fileHelper.getPicturesFolder()),
+            name
+        )
+        return FileInfo(
+            fileHelper.getUriFromFile(file),
+            file,
+            name,
+            fileHelper.getPicturesFolder(),
+            "image/jpeg"
+        )
+    }
+
+Which returns the FileInfo data class
+
+It creates a temporary file and also successfully generated the Uri.
+
+Next, it launches the takePictureLauncher:
+
+takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+            providerFileManager.insertImageToStore(photoInfo!!)
+        }
+
+and when the user captured a picture, it will be written t the temporary file, and not yet in the mediastore.
+
+It will be inserting the captured picture to mediastore after the camera finishes (Ok button), and calling the insertImageToStore() method via the ProviderFileManager.
+
+the process of input and output streams has started, which copies the photo from the temporary file location to the mediastore storage:
+
+private fun insertToStore(fileInfo: FileInfo, contentUri: Uri, contentValues: ContentValues) {
+
+        executor.execute {
+            val insertedUri = contentResolver.insert(contentUri, contentValues)
+            insertedUri?.let {
+                val inputStream = contentResolver.openInputStream(fileInfo.uri)
+                val outputStream = contentResolver.openOutputStream(insertedUri)
+                IOUtils.copy(inputStream, outputStream)
+            }
+        }
+    }
+
+but before the bytes is copied, it inserts the Uri first containing an empty file entry in the mediastore rows, which only consists of display name, relative path (based on os version) and mime type:
+
+fun generateImageContentValues(fileInfo: FileInfo) = ContentValues().apply {
+        this.put(MediaStore.Images.Media.DISPLAY_NAME, fileInfo.name)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            this.put(MediaStore.Images.Media.RELATIVE_PATH, fileInfo.relativePath)
+        }
+        this.put(MediaStore.Images.Media.MIME_TYPE, fileInfo.mimeType)
+    }
+
+now, since it returns the successfully inserted mediastore Uri:
+
+insertedUri?.let {
+                val inputStream = contentResolver.openInputStream(fileInfo.uri)
+                val outputStream = contentResolver.openOutputStream(insertedUri)
+                IOUtils.copy(inputStream, outputStream)
+            }
+
+it will start copying the bytes onto the relative path storage on your gallery or whatever apps.
+
+since the temporary captured image file still exists, it should be handled by deleting it, for example because it is no longer needed.
