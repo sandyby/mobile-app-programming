@@ -1,10 +1,12 @@
 package com.example.lab_week_10_sandy
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.lab_week_10_sandy.viewmodels.TotalViewModel
@@ -26,6 +28,7 @@ class FirstFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_first, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         prepareViewModel()
@@ -36,6 +39,7 @@ class FirstFragment : Fragment() {
             getString(R.string.tv_total, total)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun prepareViewModel() {
         val viewModel =
             ViewModelProvider(requireActivity()).get(TotalViewModel::class.java)
