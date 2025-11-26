@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".FirstFragment">
 
     <TextView
         android:id="@+id/tv_total"
@@ -13,19 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="@string/tv_total"
-        android:textSize="32dp"
+        android:textSize="32sp"
         android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/btn_increment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Increment" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container"
-        android:name="com.example.lab_week_10_sandy.FirstFragment"
-        android:layout_width="match_parent"
-        android:layout_height="400dp" />
 
 </LinearLayout>
